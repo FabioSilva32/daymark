@@ -1,9 +1,11 @@
+
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  
   <defs>
     <linearGradient id="bgGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#140708" />
       <stop offset="50%" stop-color="#080808" />
-      <stop offset="100%" stop-color="#020202" />
+      <stop offset="100%" stop-color="#000000" />
     </linearGradient>
     <linearGradient id="redGrad" x1="120" y1="100" x2="390" y2="410" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#FF242E" />
@@ -15,34 +17,33 @@
       <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
     </linearGradient>
     <radialGradient id="ambientGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#E50914" stop-opacity="0.25" />
+      <stop offset="0%" stop-color="#E50914" stop-opacity="0.32" />
       <stop offset="100%" stop-color="#E50914" stop-opacity="0" />
     </radialGradient>
   </defs>
 
-  <!-- Background App Squircle for iOS / Android Phone App -->
-  <rect width="512" height="512" rx="116" fill="url(#bgGrad)" />
-  <rect x="2" y="2" width="508" height="508" rx="114" stroke="#2A1214" stroke-width="2.5" />
-  <rect x="5" y="5" width="502" height="502" rx="111" stroke="#222222" stroke-width="1.5" />
+  <rect x="8" y="8" width="496" height="496" rx="116" fill="url(#bgGrad)" />
+  <rect x="10" y="10" width="492" height="492" rx="114" stroke="#2A1214" stroke-width="2" />
+  <rect x="12" y="12" width="488" height="488" rx="112" stroke="#1F1F1F" stroke-width="1.5" />
+  
+    <g transform="translate(256, 256) scale(0.7) translate(-272, -256)">
+      <!-- Ambient Glow Behind Logo -->
+      <circle cx="272" cy="256" r="180" fill="url(#ambientGlow)" />
 
-  <!-- Ambient Glow Behind Logo -->
-  <circle cx="256" cy="256" r="160" fill="url(#ambientGlow)" />
+      <!-- Main Outer D Silhouette with Chamfered Corners -->
+      <path d="M148 112 H268 C342 112 396 166 396 256 C396 346 342 400 268 400 H148 V112 Z" fill="url(#redGrad)" />
+      
+      <!-- Top Chamfer Highlight Cut -->
+      <path d="M148 112 L216 112 L176 152 H148 V112 Z" fill="#FF7A80" opacity="0.6" />
 
-  <!-- DAYMARK 'D' ICON EMBLEM -->
-  <g>
-    <!-- Main Outer D Silhouette with Chamfered Corners -->
-    <path d="M148 112 H268 C342 112 396 166 396 256 C396 346 342 400 268 400 H148 V112 Z" fill="url(#redGrad)" />
-    
-    <!-- Top Chamfer Highlight Cut -->
-    <path d="M148 112 L216 112 L176 152 H148 V112 Z" fill="#FF7A80" opacity="0.6" />
+      <!-- Inner Cutout Creating Modern Minimal Lettermark -->
+      <path d="M216 182 H262 C302 182 328 214 328 256 C328 298 302 330 262 330 H216 V182 Z" fill="#050505" />
 
-    <!-- Inner Cutout Creating Modern Minimal Lettermark -->
-    <path d="M216 182 H262 C302 182 328 214 328 256 C328 298 302 330 262 330 H216 V182 Z" fill="#080808" />
+      <!-- Inner Horizon Daymark Slit / Diamond Compass Core -->
+      <path d="M256 226 L278 256 L256 286 L234 256 Z" fill="url(#redGrad)" />
 
-    <!-- Inner Horizon Daymark Slit / Diamond Compass Core -->
-    <path d="M256 226 L278 256 L256 286 L234 256 Z" fill="url(#redGrad)" />
-
-    <!-- Top Gloss Sheen -->
-    <path d="M154 118 H268 C336 118 384 166 390 248 C366 186 316 160 252 160 H154 V118 Z" fill="url(#accentGrad)" />
-  </g>
+      <!-- Top Gloss Sheen -->
+      <path d="M154 118 H268 C336 118 384 166 390 248 C366 186 316 160 252 160 H154 V118 Z" fill="url(#accentGrad)" />
+    </g>
+  
 </svg>

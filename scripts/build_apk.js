@@ -35,6 +35,25 @@ if (fs.existsSync(srcApk)) {
   fs.copyFileSync(srcApk, destDebugApk);
   const sizeMb = (fs.statSync(destApk).size / (1024 * 1024)).toFixed(2);
   console.log(`\n🎉 SUCCESS! Standalone APK created: ${destApk} (${sizeMb} MB)`);
+
+  // Copy directly to connected phone if available via Windows CrossDevice
+  const crossDeviceBase = 'C:\\Users\\itzfa\\CrossDevice';
+  if (fs.existsSync(crossDeviceBase)) {
+    try {
+      const devices = fs.readdirSync(crossDeviceBase);
+      for (const dev of devices) {
+        const phoneDownload = path.join(crossDeviceBase, dev, 'storage', 'Download');
+        if (fs.existsSync(phoneDownload)) {
+          const phoneDest = path.join(phoneDownload, 'Daymark.apk');
+          fs.copyFileSync(srcApk, phoneDest);
+          console.log(`📱 Instantly delivered Daymark.apk to your phone at: ${phoneDest}`);
+        }
+      }
+    } catch (e) {
+      console.log('Note: CrossDevice copy skipped:', e.message);
+    }
+  }
+
   console.log('✨ This APK is 100% self-contained and works anywhere in the world offline or online!');
 } else {
   console.error('❌ Could not find output APK at:', srcApk);
