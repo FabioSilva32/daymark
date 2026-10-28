@@ -49,26 +49,23 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // 2. Fallback to Local SQLite
+    // 2. Fallback to Local store
     if (key) {
-      const row = await dbGet<{ key: string; value: string }>(
-        'SELECT key, value FROM daymark_collections WHERE key = ?',
-        [key]
-      );
-      if (!row) {
+      const data = await dbGet(key);
+      if (data === undefined) {
         return NextResponse.json({ found: false, data: null });
       }
       return NextResponse.json({
         found: true,
-        source: 'SQLite Local',
-        data: JSON.parse(row.value),
+        source: 'Local Store',
+        data,
       });
     }
 
     const allData = await getAllCollections();
     return NextResponse.json({
       success: true,
-      database: isSupabaseConfigured ? 'Supabase (Awaiting Table Creation) / SQLite' : 'SQLite Local',
+      database: isSupabaseConfigured ? 'Supabase' : 'Local Store',
       collectionsCount: Object.keys(allData).length,
       data: allData,
     });

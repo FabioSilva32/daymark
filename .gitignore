@@ -28,11 +28,11 @@ android/*.iml
 *.apk
 *.aab
 
-# OS & IDE & Temp
+# OS & IDE
 .DS_Store
 Thumbs.db
 *.swp
 *.lnk
-*.zip
 data/
-scratch/
+
+.vercel
