@@ -8,6 +8,10 @@ const config: CapacitorConfig = {
   android: {
     backgroundColor: '#000000',
   },
+  server: {
+    url: 'https://daymark-beryl-seven.vercel.app',
+    cleartext: false,
+  },
 };
 
 export default config;
