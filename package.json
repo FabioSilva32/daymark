@@ -1,0 +1,41 @@
+{
+  "name": "daymark",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Daymark — All-in-One Personal Operating System & Management Platform",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "desktop": "electron electron/main.js",
+    "build:mobile": "node scripts/build_mobile.js",
+    "apk": "node scripts/build_apk.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.4.0",
+    "lucide-react": "^1.62.0",
+    "next": "^15.2.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^3.10.1",
+    "sqlite3": "^6.0.1",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/cli": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.6.2",
+    "electron": "^45.1.0",
+    "postcss": "^8.5.32",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^3.4.19",
+    "typescript": "5.9.3"
+  }
+}
