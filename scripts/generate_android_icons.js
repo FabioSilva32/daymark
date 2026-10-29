@@ -30,12 +30,12 @@ const svgDefs = `
   </defs>
 `;
 
-// Centered emblem snippet (scales around true center 256,256)
-function getEmblemGroup(scale = 0.72) {
+// Optically centered emblem (balances geometric bounds and visual weight, diamond centered in hole)
+function getEmblemGroup(scale = 0.68) {
   return `
-    <g transform="translate(256, 256) scale(${scale}) translate(-272, -256)">
+    <g transform="translate(256, 256) scale(${scale}) translate(-258, -256)">
       <!-- Ambient Glow Behind Logo -->
-      <circle cx="272" cy="256" r="180" fill="url(#ambientGlow)" />
+      <circle cx="258" cy="256" r="180" fill="url(#ambientGlow)" />
 
       <!-- Main Outer D Silhouette with Chamfered Corners -->
       <path d="M148 112 H268 C342 112 396 166 396 256 C396 346 342 400 268 400 H148 V112 Z" fill="url(#redGrad)" />
@@ -46,8 +46,8 @@ function getEmblemGroup(scale = 0.72) {
       <!-- Inner Cutout Creating Modern Minimal Lettermark -->
       <path d="M216 182 H262 C302 182 328 214 328 256 C328 298 302 330 262 330 H216 V182 Z" fill="#050505" />
 
-      <!-- Inner Horizon Daymark Slit / Diamond Compass Core -->
-      <path d="M256 226 L278 256 L256 286 L234 256 Z" fill="url(#redGrad)" />
+      <!-- Inner Horizon Daymark Slit / Diamond Compass Core (Centered inside cutout at X=272) -->
+      <path d="M272 226 L294 256 L272 286 L250 256 Z" fill="url(#redGrad)" />
 
       <!-- Top Gloss Sheen -->
       <path d="M154 118 H268 C336 118 384 166 390 248 C366 186 316 160 252 160 H154 V118 Z" fill="url(#accentGrad)" />
@@ -55,13 +55,13 @@ function getEmblemGroup(scale = 0.72) {
   `;
 }
 
-// 1. Adaptive Foreground: Completely transparent background, emblem perfectly padded (scale 0.70)
+// 1. Adaptive Foreground: Completely transparent background, emblem perfectly padded (scale 0.68)
 // In Android's 108dp canvas, the safe zone mask is the inner 72dp.
-// Scale 0.70 guarantees the emblem never touches the edge of circle/squircle masks.
+// Scale 0.68 guarantees the emblem never touches the edge of circle/squircle masks and sits in dead center.
 const foregroundSvg = `
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   ${svgDefs}
-  ${getEmblemGroup(0.70)}
+  ${getEmblemGroup(0.68)}
 </svg>
 `;
 
@@ -72,7 +72,7 @@ const legacySquircleSvg = `
   <rect x="8" y="8" width="496" height="496" rx="116" fill="url(#bgGrad)" />
   <rect x="10" y="10" width="492" height="492" rx="114" stroke="#2A1214" stroke-width="2" />
   <rect x="12" y="12" width="488" height="488" rx="112" stroke="#1F1F1F" stroke-width="1.5" />
-  ${getEmblemGroup(0.70)}
+  ${getEmblemGroup(0.68)}
 </svg>
 `;
 
@@ -83,7 +83,7 @@ const legacyRoundSvg = `
   <circle cx="256" cy="256" r="248" fill="url(#bgGrad)" />
   <circle cx="256" cy="256" r="246" stroke="#2A1214" stroke-width="2" />
   <circle cx="256" cy="256" r="244" stroke="#1F1F1F" stroke-width="1.5" />
-  ${getEmblemGroup(0.66)}
+  ${getEmblemGroup(0.65)}
 </svg>
 `;
 

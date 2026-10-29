@@ -8,7 +8,13 @@ import { Lock, User, Mail, ShieldAlert, Sparkles, Eye, EyeOff, LogIn, UserPlus }
 
 export function AuthScreen() {
   const { login, register, accounts } = useDaymark();
-  const [tab, setTab] = useState<'signin' | 'signup'>('signin');
+  const [tab, setTab] = useState<'signin' | 'signup'>(accounts.length === 0 ? 'signup' : 'signin');
+
+  React.useEffect(() => {
+    if (accounts.length === 0) {
+      setTab('signup');
+    }
+  }, [accounts.length]);
 
   // Sign In State
   const [signInUsername, setSignInUsername] = useState('');
@@ -192,9 +198,15 @@ export function AuthScreen() {
 
             {/* Registered accounts quick preview */}
             <div className="pt-3 border-t border-[#1F1F1F] text-center">
-              <p className="text-[11px] text-[#666666]">
-                Existing accounts on this device: {accounts.map((a) => a.username).join(', ')}
-              </p>
+              {accounts.length > 0 ? (
+                <p className="text-[11px] text-[#666666]">
+                  Existing accounts on this device: {accounts.map((a) => a.username).join(', ')}
+                </p>
+              ) : (
+                <p className="text-[11px] text-[#888888]">
+                  No accounts yet. Switch to <span className="text-[#E50914] font-semibold cursor-pointer underline hover:text-[#FF3333]" onClick={() => setTab('signup')}>Create Account</span> to get started!
+                </p>
+              )}
             </div>
           </form>
         )}
@@ -231,9 +243,9 @@ export function AuthScreen() {
                 <User size={14} className="text-[#666666] mr-2 shrink-0" />
                 <input
                   type="text"
-                  placeholder="e.g. lucas"
+                  placeholder="e.g. Fabio or Alex_99"
                   value={signUpUsername}
-                  onChange={(e) => setSignUpUsername(e.target.value.toLowerCase().replace(/\s+/g, '_'))}
+                  onChange={(e) => setSignUpUsername(e.target.value.replace(/\s+/g, '_'))}
                   required
                   className="bg-transparent border-0 p-0 text-xs text-white placeholder-[#555555] outline-none focus:outline-none w-full"
                 />

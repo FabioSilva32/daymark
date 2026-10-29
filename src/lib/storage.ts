@@ -44,29 +44,29 @@ export const USER_STORAGE_KEYS = {
 };
 
 export const DEFAULT_PRIMARY_ACCOUNT: UserAccount = {
-  id: 'usr_primary',
-  name: 'Alexandre',
-  username: 'alexandre',
+  id: 'usr_default',
+  name: 'User',
+  username: 'user',
   avatarColor: '#E50914',
   createdAt: '2026-01-01T00:00:00Z',
 };
 
 export function getActiveUserId(): string {
-  if (typeof window === 'undefined') return 'usr_primary';
-  return localStorage.getItem(USER_STORAGE_KEYS.ACTIVE_USER_ID) || 'usr_primary';
+  if (typeof window === 'undefined') return '';
+  return localStorage.getItem(USER_STORAGE_KEYS.ACTIVE_USER_ID) || '';
 }
 
 export function getScopedKey(baseKey: string): string {
   if (typeof window === 'undefined') return baseKey;
   if (
     baseKey === USER_STORAGE_KEYS.USER_ACCOUNTS ||
-    baseKey === USER_STORAGE_KEYS.ACTIVE_USER_ID
+    baseKey === USER_STORAGE_KEYS.ACTIVE_USER_ID ||
+    baseKey === USER_STORAGE_KEYS.AUTH_SESSION
   ) {
     return baseKey;
   }
   const activeId = getActiveUserId();
-  if (activeId === 'usr_primary') {
-    // Primary account uses original un-prefixed keys to protect existing user records
+  if (!activeId) {
     return baseKey;
   }
   return `${baseKey}_${activeId}`;
@@ -324,11 +324,8 @@ export function initDaymarkStorage(): void {
 
   // 1. Initialize User Accounts
   if (!localStorage.getItem(USER_STORAGE_KEYS.USER_ACCOUNTS)) {
-    localStorage.setItem(USER_STORAGE_KEYS.USER_ACCOUNTS, JSON.stringify([DEFAULT_PRIMARY_ACCOUNT]));
-    syncToDatabase(USER_STORAGE_KEYS.USER_ACCOUNTS, [DEFAULT_PRIMARY_ACCOUNT]);
-  }
-  if (!localStorage.getItem(USER_STORAGE_KEYS.ACTIVE_USER_ID)) {
-    localStorage.setItem(USER_STORAGE_KEYS.ACTIVE_USER_ID, 'usr_primary');
+    localStorage.setItem(USER_STORAGE_KEYS.USER_ACCOUNTS, JSON.stringify([]));
+    syncToDatabase(USER_STORAGE_KEYS.USER_ACCOUNTS, []);
   }
 
   const settingsKey = getScopedKey(STORAGE_KEYS.SETTINGS);
@@ -481,7 +478,7 @@ export async function syncFromDatabase(): Promise<boolean> {
 export const StorageAPI = {
   // User Accounts & Authentication
   isAuthenticated: (): boolean => {
-    if (typeof window === 'undefined') return true;
+    if (typeof window === 'undefined') return false;
     return localStorage.getItem(USER_STORAGE_KEYS.AUTH_SESSION) === 'authenticated';
   },
   authenticateUser: (
@@ -506,7 +503,6 @@ export const StorageAPI = {
         return { success: false, error: 'Incorrect password. Please try again.' };
       }
     } else if (password && password.trim()) {
-      // If user had no password yet (legacy Alexandre), set their chosen password now
       target.password = password.trim();
       localStorage.setItem(USER_STORAGE_KEYS.USER_ACCOUNTS, JSON.stringify(accounts));
       syncToDatabase(USER_STORAGE_KEYS.USER_ACCOUNTS, accounts);
@@ -525,12 +521,14 @@ export const StorageAPI = {
     avatarColor?: string;
   }): { success: boolean; account?: UserAccount; error?: string } => {
     const accounts = StorageAPI.getUserAccounts();
-    const cleanUsername = data.username.trim().toLowerCase().replace(/\s+/g, '_');
+    // Allow uppercase characters in username! Preserve exact capitalization entered by the user.
+    const cleanUsername = data.username.trim().replace(/\s+/g, '_');
 
     if (!cleanUsername) {
       return { success: false, error: 'Username is required.' };
     }
-    if (accounts.some((a) => a.username.toLowerCase() === cleanUsername)) {
+    // Case-insensitive uniqueness check
+    if (accounts.some((a) => a.username.toLowerCase() === cleanUsername.toLowerCase())) {
       return { success: false, error: 'This username is already taken. Please choose another.' };
     }
 
@@ -572,21 +570,14 @@ export const StorageAPI = {
     window.dispatchEvent(new Event('daymark-storage-update'));
   },
   getUserAccounts: (): UserAccount[] => {
-    if (typeof window === 'undefined') return [DEFAULT_PRIMARY_ACCOUNT];
+    if (typeof window === 'undefined') return [];
     const raw = localStorage.getItem(USER_STORAGE_KEYS.USER_ACCOUNTS);
-    if (!raw) {
-      localStorage.setItem(
-        USER_STORAGE_KEYS.USER_ACCOUNTS,
-        JSON.stringify([DEFAULT_PRIMARY_ACCOUNT])
-      );
-      syncToDatabase(USER_STORAGE_KEYS.USER_ACCOUNTS, [DEFAULT_PRIMARY_ACCOUNT]);
-      return [DEFAULT_PRIMARY_ACCOUNT];
-    }
+    if (!raw) return [];
     try {
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) && parsed.length > 0 ? parsed : [DEFAULT_PRIMARY_ACCOUNT];
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
-      return [DEFAULT_PRIMARY_ACCOUNT];
+      return [];
     }
   },
   getActiveUserId: (): string => getActiveUserId(),
@@ -596,13 +587,16 @@ export const StorageAPI = {
     window.dispatchEvent(new Event('daymark-storage-update'));
   },
   deleteUserAccount: (id: string): void => {
-    if (id === 'usr_primary') return;
     const accounts = StorageAPI.getUserAccounts().filter((a) => a.id !== id);
     localStorage.setItem(USER_STORAGE_KEYS.USER_ACCOUNTS, JSON.stringify(accounts));
     syncToDatabase(USER_STORAGE_KEYS.USER_ACCOUNTS, accounts);
     if (getActiveUserId() === id) {
-      StorageAPI.setActiveUserId('usr_primary');
-      StorageAPI.logout();
+      if (accounts.length > 0) {
+        StorageAPI.setActiveUserId(accounts[0].id);
+      } else {
+        StorageAPI.setActiveUserId('');
+        StorageAPI.logout();
+      }
     } else {
       window.dispatchEvent(new Event('daymark-storage-update'));
     }

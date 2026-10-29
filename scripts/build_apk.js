@@ -45,10 +45,10 @@ if (fs.existsSync(srcApk)) {
         const phoneDownload = path.join(crossDeviceBase, dev, 'storage', 'Download');
         if (fs.existsSync(phoneDownload)) {
           const phoneApk = path.join(phoneDownload, 'Daymark.apk');
-          const phoneV1Apk = path.join(phoneDownload, 'Daymark-v1.1.apk');
+          const phoneV2Apk = path.join(phoneDownload, 'Daymark-v1.2.apk');
           execSync(`powershell -Command "Copy-Item -Path '${srcApk}' -Destination '${phoneApk}' -Force"`);
-          execSync(`powershell -Command "Copy-Item -Path '${srcApk}' -Destination '${phoneV1Apk}' -Force"`);
-          console.log(`📱 Instantly delivered Daymark.apk and Daymark-v1.1.apk to your phone at: ${phoneDownload}`);
+          execSync(`powershell -Command "Copy-Item -Path '${srcApk}' -Destination '${phoneV2Apk}' -Force"`);
+          console.log(`📱 Instantly delivered Daymark.apk and Daymark-v1.2.apk to your phone at: ${phoneDownload}`);
         }
       }
     } catch (e) {

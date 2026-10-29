@@ -70,11 +70,19 @@ const INITIAL_SETTINGS: UserSettings = {
   enabledModules: {} as any,
 };
 
+const GUEST_ACCOUNT: UserAccount = {
+  id: '',
+  name: 'New User',
+  username: 'user',
+  avatarColor: '#E50914',
+  createdAt: '',
+};
+
 export function DaymarkProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<UserSettings>(INITIAL_SETTINGS);
-  const [accounts, setAccounts] = useState<UserAccount[]>([DEFAULT_PRIMARY_ACCOUNT]);
-  const [activeAccount, setActiveAccount] = useState<UserAccount>(DEFAULT_PRIMARY_ACCOUNT);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [accounts, setAccounts] = useState<UserAccount[]>([]);
+  const [activeAccount, setActiveAccount] = useState<UserAccount>(GUEST_ACCOUNT);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const [isOnline, setIsOnline] = useState(true);
   const [dbConnected, setDbConnected] = useState(true);
@@ -89,10 +97,10 @@ export function DaymarkProvider({ children }: { children: React.ReactNode }) {
     setSettings(StorageAPI.getSettings());
     const currentAccounts = StorageAPI.getUserAccounts();
     const activeId = StorageAPI.getActiveUserId();
-    const found = currentAccounts.find((a) => a.id === activeId) || currentAccounts[0] || DEFAULT_PRIMARY_ACCOUNT;
+    const found = currentAccounts.find((a) => a.id === activeId) || currentAccounts[0] || GUEST_ACCOUNT;
     setAccounts(currentAccounts);
     setActiveAccount(found);
-    setIsAuthenticated(StorageAPI.isAuthenticated());
+    setIsAuthenticated(StorageAPI.isAuthenticated() && currentAccounts.length > 0 && currentAccounts.some(a => a.id === activeId));
   }, []);
 
   const addToast = useCallback((title: string, description?: string, type: 'success' | 'info' | 'error' = 'info') => {
