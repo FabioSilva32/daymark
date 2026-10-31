@@ -1,6 +1,17 @@
-# Daymark — Personal Operating System & Command Centre
+# Daymark ("The Everything App") — Personal Operating System & Command Centre
 
-Daymark is an all-in-one personal operating system designed for desktop PCs, laptops, tablets, and mobile phones. It replaces disjointed single-purpose tools by unifying productivity, schedule, fitness, nutrition, personal finances, daily utilities, documents, travel plans, and an AI assistant into a single, cohesive, installable Progressive Web App (PWA).
+[![Live Demo](https://img.shields.io/badge/Live_Application-daymark--lynnx.vercel.app-10b981?style=for-the-badge)](https://daymark-lynnx.vercel.app)
+[![Next.js 15](https://img.shields.io/badge/Next.js_15-React_19-6366f1?style=for-the-badge)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3b82f6?style=for-the-badge)](https://www.typescriptlang.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL_%2B_RLS-059669?style=for-the-badge)](https://supabase.com)
+[![Platforms](https://img.shields.io/badge/Platforms-PWA_%7C_Windows_Electron_%7C_Android_APK-a855f7?style=for-the-badge)](https://daymark-lynnx.vercel.app)
+
+> **Live Web App (PWA):** [https://daymark-lynnx.vercel.app](https://daymark-lynnx.vercel.app)  
+> **Author:** Fábio Júnior Fernandes Silva — BSc in Web Multimedia Development @ IPCA (Portugal)
+
+![Daymark — The Everything App Command Centre Preview](./preview.png)
+
+**Daymark ("The Everything App")** is an all-in-one personal operating system engineered for desktop PCs, laptops, tablets, and mobile phones. It replaces disjointed single-purpose tools by unifying **22 integrated modules** — productivity, Kanban tasks, Eisenhower priority matrix, academic study tools, schedule, fitness, nutrition, personal finances, developer utilities, documents, travel plans, and an AI assistant — into a single, cohesive Progressive Web App (PWA), Windows Electron desktop app, and Android APK.
 
 ---
 
